@@ -6,7 +6,6 @@ use Closure;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Laravel\WorkOS\WorkOS;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use WorkOS\UserManagement;
 
 class AuthKitAccountDeletionRequest extends FormRequest
@@ -32,8 +31,10 @@ class AuthKitAccountDeletionRequest extends FormRequest
 
         $using($user);
 
-        $this->session()->invalidate();
-        $this->session()->regenerateToken();
+        if ($this->hasSession()) {
+            $this->session()->invalidate();
+            $this->session()->regenerateToken();
+        }
 
         return redirect('/');
     }
